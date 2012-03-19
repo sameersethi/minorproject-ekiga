@@ -290,6 +290,53 @@ bool CallManager::get_silence_detection () const
   return (sd.m_mode != OpalSilenceDetector::NoSilenceDetection);
 }
 
+void CallManager::set_audio_level_calc (bool enabled, bool vad)
+{
+  OpalAudioLevelCalculator::Params sd;
+
+  // General settings
+  sd = GetAudioLevelParams ();
+  if (enabled)
+	  if (vad)
+		  sd.m_mode = OpalAudioLevelCalculator::AudioLevelCalculationWithVAD;
+	  else
+		  sd.m_mode = OpalAudioLevelCalculator::DoAudioLevelCalculation;
+  else
+    sd.m_mode = OpalAudioLevelCalculator::NoAudioLevelCalculation;
+
+  SetAudioLevelParams (sd);
+
+  // Adjust setting for all connections of all calls
+  for (PSafePtr<OpalCall> call = activeCalls;
+       call != NULL;
+       ++call) {
+
+    for (int i = 0;
+         i < 2;
+         i++) {
+
+      PSafePtr<OpalConnection> connection = call->GetConnection (i);
+      if (connection) {
+
+        OpalAudioLevelCalculator *audio_level_calc = connection->GetAudioLevelCalculator ();
+
+        if (audio_level_calc)
+          audio_level_calc->SetParameters (sd);
+      }
+    }
+  }
+}
+
+
+bool CallManager::get_audio_level_calc () const
+{
+  OpalAudioLevelCalculator::Params sd;
+
+  sd = GetAudioLevelParams ();
+
+  return (sd.m_mode != OpalAudioLevelCalculator::NoAudioLevelCalculation);
+}
+
 
 void CallManager::set_reject_delay (unsigned delay)
 {

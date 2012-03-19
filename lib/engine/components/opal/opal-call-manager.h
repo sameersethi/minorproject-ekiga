@@ -100,6 +100,9 @@ public:
     void set_silence_detection (bool enabled);
     bool get_silence_detection () const;
 
+    void set_audio_level_calc (bool enabled, bool vad);
+    bool get_audio_level_calc () const;
+
     void set_reject_delay (unsigned delay);
     unsigned get_reject_delay () const;
 

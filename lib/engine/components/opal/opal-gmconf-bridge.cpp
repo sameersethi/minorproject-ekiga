@@ -77,6 +77,9 @@ ConfBridge::ConfBridge (Ekiga::Service & _service)
 
   keys.push_back (AUDIO_CODECS_KEY "enable_silence_detection");
   keys.push_back (AUDIO_CODECS_KEY "enable_echo_cancelation");
+  keys.push_back (AUDIO_CODECS_KEY "enable_audio_level_calc");
+  keys.push_back (AUDIO_CODECS_KEY "enable_audio_level_calc_withvad");
+
 
   keys.push_back (AUDIO_CODECS_KEY "media_list");
   keys.push_back (VIDEO_CODECS_KEY "media_list");
@@ -201,6 +204,22 @@ void ConfBridge::on_property_changed (std::string key, GmConfEntry *entry)
     manager.set_echo_cancellation (gm_conf_entry_get_bool (entry));
   }
   
+  //
+  // Audio Level calculation without VAD
+  //
+  else if (key == AUDIO_CODECS_KEY "enable_audio_level_calc") {
+
+    manager.set_audio_level_calc (gm_conf_entry_get_bool (entry), false);
+  }
+
+  //
+  // Audio Level calculation with VAD
+  //
+  else if (key == AUDIO_CODECS_KEY "enable_audio_level_calc_withvad") {
+
+    manager.set_audio_level_calc (gm_conf_entry_get_bool (entry), true);
+  }
+
   
   // 
   // Audio & video codecs
