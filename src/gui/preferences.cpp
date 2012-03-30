@@ -981,9 +981,9 @@ gm_pw_init_audio_codecs_page (GtkWidget *prefs_window,
   
   gnome_prefs_toggle_new (subsection, _("Enable echo can_celation"), AUDIO_CODECS_KEY "enable_echo_cancelation", _("If enabled, use echo cancelation."), 1);
 
-  gnome_prefs_toggle_new (subsection, _("Enable Audio Level Calculation"), AUDIO_CODECS_KEY "enable_audio_level_calc", _("If enabled, calculate level of active speech and send in RTP extension. (RFC 6464)"), 2);
+  gnome_prefs_toggle_new (subsection, _("Enable RFC 6464"), AUDIO_CODECS_KEY "enable_rfc6464", _("If enabled, calculate level of active speech and send in RTP extension. (RFC 6464)"), 2);
 
-  gnome_prefs_toggle_new (subsection, _("Enable VAD"), AUDIO_CODECS_KEY "enable_audio_level_calc_withvad", _("If enabled, perform voice activity detection and send in RTP extension. (RFC 6464)"), 3);
+  gnome_prefs_toggle_new (subsection, _("Enable RFC 6464 with VAD"), AUDIO_CODECS_KEY "enable_rfc6464_withvad", _("If enabled, perform voice activity detection and send in RTP extension. (RFC 6464)"), 3);
 
   gnome_prefs_spin_new (subsection, _("Maximum _jitter buffer (in ms):"), AUDIO_CODECS_KEY "maximum_jitter_buffer", _("The maximum jitter buffer size for audio reception (in ms)."), 20.0, 2000.0, 50.0, 4, NULL, true);
 }

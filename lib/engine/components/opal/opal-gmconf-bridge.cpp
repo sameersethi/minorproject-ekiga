@@ -77,8 +77,8 @@ ConfBridge::ConfBridge (Ekiga::Service & _service)
 
   keys.push_back (AUDIO_CODECS_KEY "enable_silence_detection");
   keys.push_back (AUDIO_CODECS_KEY "enable_echo_cancelation");
-  keys.push_back (AUDIO_CODECS_KEY "enable_audio_level_calc");
-  keys.push_back (AUDIO_CODECS_KEY "enable_audio_level_calc_withvad");
+  keys.push_back (AUDIO_CODECS_KEY "enable_rfc6464");
+  keys.push_back (AUDIO_CODECS_KEY "enable_rfc6464_withvad");
 
 
   keys.push_back (AUDIO_CODECS_KEY "media_list");
@@ -205,19 +205,19 @@ void ConfBridge::on_property_changed (std::string key, GmConfEntry *entry)
   }
   
   //
-  // Audio Level calculation without VAD
+  // RFC 6464 implementation without VAD
   //
-  else if (key == AUDIO_CODECS_KEY "enable_audio_level_calc") {
+  else if (key == AUDIO_CODECS_KEY "enable_rfc6464") {
 
-    manager.set_audio_level_calc (gm_conf_entry_get_bool (entry), false);
+    manager.set_rfc6464 (gm_conf_entry_get_bool (entry), false);
   }
 
   //
-  // Audio Level calculation with VAD
+  // RFC 6464 implementation with VAD
   //
-  else if (key == AUDIO_CODECS_KEY "enable_audio_level_calc_withvad") {
+  else if (key == AUDIO_CODECS_KEY "enable_rfc6464_withvad") {
 
-    manager.set_audio_level_calc (gm_conf_entry_get_bool (entry), true);
+    manager.set_rfc6464 (gm_conf_entry_get_bool (entry), true);
   }
 
   

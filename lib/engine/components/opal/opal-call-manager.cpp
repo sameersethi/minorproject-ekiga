@@ -290,19 +290,53 @@ bool CallManager::get_silence_detection () const
   return (sd.m_mode != OpalSilenceDetector::NoSilenceDetection);
 }
 
-void CallManager::set_audio_level_calc (bool enabled, bool vad)
+void CallManager::set_rfc6464 (bool enabled, bool vad)
 {
+  if (!enabled)
+	return;
+
+  OpalMediaFormatList media_formats_list;
+
+  OpalMediaFormat::GetAllRegisteredMediaFormats (media_formats_list);
+
+  PTRACE(1, "Ekiga Got Here 1");
+
+  // Configure all mediaOptions of all Audio MediaFormats
+  for (int i = 0 ; i < media_formats_list.GetSize () ; i++) {
+
+	  PTRACE(1, "Ekiga Got Here 2");
+
+    OpalMediaFormat media_format = media_formats_list [i];
+    if (media_format.GetMediaType() == OpalMediaType::Audio ()) {
+      if (vad == true) {
+    	  PTRACE(1, "Ekiga Got Here 3");
+          media_format.AddOption(new OpalMediaOptionBoolean (OpalAudioFormat::RFC6464WithVADOption(),
+                                                              true, OpalMediaOption::NoMerge,
+                                                              true));
+        media_format.SetOptionBoolean (OpalAudioFormat::RFC6464WithVADOption(),
+                                           true);
+      } else {
+    	  PTRACE(1, "Ekiga Got Here 4");
+
+          media_format.AddOption(new OpalMediaOptionBoolean (OpalAudioFormat::RFC6464Option(),
+                                                              true, OpalMediaOption::NoMerge,
+                                                              true));
+        media_format.SetOptionBoolean (OpalAudioFormat::RFC6464Option(),
+                                           true);
+      }
+
+      OpalMediaFormat::SetRegisteredMediaFormat(media_format);
+    }
+  }
+
   OpalAudioLevelCalculator::Params sd;
 
   // General settings
   sd = GetAudioLevelParams ();
-  if (enabled)
-	  if (vad)
-		  sd.m_mode = OpalAudioLevelCalculator::AudioLevelCalculationWithVAD;
-	  else
-		  sd.m_mode = OpalAudioLevelCalculator::DoAudioLevelCalculation;
+  if (vad)
+    sd.m_mode = OpalAudioLevelCalculator::AudioLevelCalculationWithVAD;
   else
-    sd.m_mode = OpalAudioLevelCalculator::NoAudioLevelCalculation;
+	sd.m_mode = OpalAudioLevelCalculator::DoAudioLevelCalculation;
 
   SetAudioLevelParams (sd);
 
@@ -328,11 +362,16 @@ void CallManager::set_audio_level_calc (bool enabled, bool vad)
 }
 
 
-bool CallManager::get_audio_level_calc () const
+bool CallManager::get_rfc6464 (bool *vad) const
 {
   OpalAudioLevelCalculator::Params sd;
 
   sd = GetAudioLevelParams ();
+
+  if (sd.m_mode == OpalAudioLevelCalculator::AudioLevelCalculationWithVAD)
+    *vad = true;
+  else
+    *vad = false;
 
   return (sd.m_mode != OpalAudioLevelCalculator::NoAudioLevelCalculation);
 }

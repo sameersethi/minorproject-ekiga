@@ -186,16 +186,16 @@ namespace Ekiga
      */
     virtual unsigned get_maximum_jitter () const = 0;
 
-    /** Enable Audio Level Calculation
-     * @param enabled is true if audio level calculation should be enabled, false
+    /** Enable RFC 6464
+     * @param enabled is true if rfc 6464 should be enabled, false
      * otherwise.
      */
-    virtual void set_audio_level_calc (bool enabled, bool vad) = 0;
+    virtual void set_rfc6464 (bool enabled, bool vad) = 0;
 
-    /** Get Audio Level Calculation setting
-     * @return true if audio level calculation is enabled.
+    /** Get RFC 6464 setting
+     * @return true if rfc 6464 is enabled.
      */
-    virtual bool get_audio_level_calc () const = 0;
+    virtual bool get_rfc6464 (bool * vad) const = 0;
 
     /** Set delay before dropping an incoming call 
      * @param delay is the delay after which the call should be rejected
